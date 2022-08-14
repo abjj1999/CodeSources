@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secret, setSecret] = useState("");
-
+  const [ok, setOk] = useState(false);
   // const data = {
   //   name,
   //   email,
@@ -14,23 +14,29 @@ function Register() {
   //   secret,
   // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // console.log(data);/
-    axios
-      .post(`http://localhost:8000/api/register`, {
+    try {
+      const { data } = await axios.post(`http://localhost:8000/api/register`, {
         name,
         email,
         password,
         secret,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      setOk(data.ok);
+    } catch (error) {
+      toast.error(error.response.data, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    // console.log(data
     setName("");
     setEmail("");
     setPassword("");

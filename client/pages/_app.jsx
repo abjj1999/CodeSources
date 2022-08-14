@@ -2,7 +2,9 @@
 //
 import Nav from "../components/Nav";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "antd/dist/antd.css";
 import Head from "next/head";
 import Script from "next/script";
 
@@ -18,6 +20,7 @@ function MyApp({ Component, pageProps }) {
         crossOrigin="anonymous"
       />
       <Nav />
+      <ToastContainer position="top-center" />
       <Component {...pageProps} />;
     </>
   );

@@ -22,7 +22,9 @@ export const register = async (req, res) => {
     const user = new User({ name, email, password: hasedPW, secret });
     try {
       await user.save();
-      return res.status(200).json("user has been regstered ");
+      return res.json({
+        ok: true,
+      });
     } catch (error) {
       console.log("Register failed", error);
     }
