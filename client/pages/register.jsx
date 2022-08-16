@@ -97,6 +97,16 @@ function Register() {
           </Modal>
         </div>
       </div>
+      <div className="row">
+        <div className="col">
+          <p className="text-center">
+            Already registered?
+            <Link href="/login">
+              <a> Login Now</a>
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
