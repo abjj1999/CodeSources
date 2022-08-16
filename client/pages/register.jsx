@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import Link from "next/link";
 
 import AuthForm from "../components/forms/AuthForm";
+import { UserContext } from "../context";
+import { useRouter } from "next/router";
 
 function Register() {
   const [name, setName] = useState("");
@@ -13,7 +15,8 @@ function Register() {
   const [secret, setSecret] = useState("");
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
+  const [state, setState] = useContext(UserContext);
   // const data = {
   //   name,
   //   email,
@@ -55,6 +58,8 @@ function Register() {
     }
     // console.log(data
   };
+
+  if (state && state.token) router.push("/");
 
   return (
     <div className="container">

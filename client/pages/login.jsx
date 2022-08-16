@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { UserContext } from "../context";
 
 import AuthForm from "../components/forms/AuthForm";
 
@@ -19,6 +20,8 @@ function Login() {
   //   secret,
   // };
 
+  const [state, setState] = useContext(UserContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,9 +33,16 @@ function Login() {
           password,
         }
       );
-      // router.push("/");
-      console.log(data);
 
+      //populate setState with the data we recieve from BE
+      setState({
+        user: data.user,
+        token: data.token,
+      });
+
+      //Save in LocalS
+      window.localStorage.setItem("auth", JSON.stringify(data));
+      router.push("/");
       setEmail("");
       setPassword("");
 
@@ -52,6 +62,8 @@ function Login() {
     }
     // console.log(data
   };
+
+  if (state && state.token) router.push("/");
 
   return (
     <div className="container">

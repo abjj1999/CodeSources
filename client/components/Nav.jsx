@@ -1,7 +1,23 @@
-import React from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
+import { UserContext } from "../context";
+import { useRouter } from "next/router";
 
 const Nav = () => {
+  const [current, setCurrent] = useState("");
+  const [state, setState] = useContext(UserContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    process.browser && setCurrent(window.location.pathname);
+  }, [process.browser && window.location.pathname]);
+
+  const logOut = () => {
+    window.localStorage.removeItem("auth");
+    setState(null);
+    router.push("/login");
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-dark d-flex justify-content-between  ">
       <div className="container-fluid ">
@@ -26,11 +42,55 @@ const Nav = () => {
                 Home
               </a>
             </li> */}
-            <li className="nav-item">
-              <Link href="/login">
-                <a className="nav-link text-light">Login</a>
-              </Link>
-            </li>
+
+            {state !== null ? (
+              <>
+                <li className="nav-item">
+                  <Link href="/user/dashboard">
+                    <a
+                      className={`nav-link text-light  ${
+                        current === "/user/dashboard" && "active"
+                      }`}
+                    >
+                      <span className="">
+                        {state && state.user && state.user.name}
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a onClick={logOut} className="nav-link text-light">
+                    Log OUT
+                  </a>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link href="/login">
+                    <a
+                      className={`nav-link text-light  ${
+                        current === "/login" && "active"
+                      }`}
+                    >
+                      Login
+                    </a>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/register">
+                    <a
+                      className={`nav-link text-light  ${
+                        current === "/register" && "active"
+                      }`}
+                    >
+                      Register
+                    </a>
+                  </Link>
+                </li>
+              </>
+            )}
+
             {/* <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -62,11 +122,6 @@ const Nav = () => {
                 </li>
               </ul>
             </li> */}
-            <li className="nav-item">
-              <Link href="/register">
-                <a className="nav-link text-light">Register</a>
-              </Link>
-            </li>
           </ul>
           {/* <form className="d-flex" role="search">
             <input
