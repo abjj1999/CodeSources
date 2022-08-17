@@ -72,3 +72,20 @@ export const login = async (req, res) => {
     return res.status(400).send("error, try again");
   }
 };
+
+export const currentUser = async (req, res) => {
+  //send token in headers using POSTMAN or INSOMNIA
+  //verify token using expressJWT
+  //if verified you get a user ID from that token
+  // based on the user id find htat user
+  // if found send OK
+
+  try {
+    const user = await User.findById(req.user._id);
+    //res.json(user);
+    res.json({ ok: true });
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(400);
+  }
+};
