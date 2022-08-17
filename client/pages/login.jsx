@@ -8,8 +8,8 @@ import { UserContext } from "../context";
 import AuthForm from "../components/forms/AuthForm";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test8@gmail.com");
+  const [password, setPassword] = useState("1234512345");
   // const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -26,13 +26,10 @@ function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API}/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const { data } = await axios.post(`/login`, {
+        email,
+        password,
+      });
 
       //populate setState with the data we recieve from BE
       setState({

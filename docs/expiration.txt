@@ -1,0 +1,7 @@
+- What will happen after the token expired
+    ` we can configure Axios globally using interceptors
+        we can throw an error if the token expired and log the user out
+
+        when we make a request, and based on the error message: 
+            we can either log the user out 
+            
