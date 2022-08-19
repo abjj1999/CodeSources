@@ -6,18 +6,26 @@ export const register = async (req, res) => {
   try {
     const { name, email, password, secret } = req.body;
     if (!name)
-      return res.status(404).json("Please enter a name, name is required!");
+      return res.json({
+        error: "Please enter a name, name is required!",
+      });
 
     if (!password || password.length < 6) {
-      return res.status(404).json("Please enter A proper password");
+      return res.json({
+        error: "Please enter A proper password",
+      });
     }
     if (!secret) {
-      return res.status(404).json("Please enter a secret, secret is required!");
+      return res.json({
+        error: "Please enter a secret, secret is required!",
+      });
     }
 
     const exist = await User.findOne({ email });
     if (exist) {
-      return res.status(404).json("email has been used before");
+      return res.json({
+        error: "email has been used before",
+      });
     }
     const hasedPW = await hashPassword(password);
 
@@ -29,9 +37,15 @@ export const register = async (req, res) => {
       });
     } catch (error) {
       console.log("Register failed", error);
+      return res.json({
+        error: "Something went wrong, try again.",
+      });
     }
   } catch (error) {
     console.log(error);
+    return res.json({
+      error: "Something went wrong, try again.",
+    });
   }
 };
 
@@ -44,14 +58,19 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).send("No user found");
+      return res.json({
+        error: "No user found",
+      });
     }
 
     //if found check for password
     const match = await comparePassword(password, user.password);
 
     // if not match
-    if (!match) return res.status(400).send("Wrong Password!");
+    if (!match)
+      return res.json({
+        error: "Wrong Password!",
+      });
 
     // create signed JWT
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -87,5 +106,40 @@ export const currentUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
+  }
+};
+
+export const forgotPW = async (req, res) => {
+  // console.log(req.body);
+
+  const { email, newPassword, secret } = req.body;
+  if (!newPassword || newPassword.length < 6) {
+    return res.json({
+      error: "New passward is required and should be more than 6",
+    });
+  }
+  if (!secret) {
+    return res.json({
+      error: "Secret is required",
+    });
+  }
+  const user = await User.findOne({ email, secret });
+  if (!user) {
+    return res.json({
+      error: "We can not verify you with those details",
+    });
+  }
+
+  try {
+    const hashed = await hashPassword(newPassword);
+    await User.findByIdAndUpdate(user._id, { password: hashed });
+    return res.json({
+      success: "Congrats, now you can log in with new password!!",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      error: "Something went wrong, try again.",
+    });
   }
 };

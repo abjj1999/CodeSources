@@ -39,17 +39,20 @@ function ForgotPassword() {
       // setPassword("");
       // setSecret("");
       // setLoading(false);
+
+      if (data.error) {
+        toast.error(data.error);
+        setLoading(false);
+      }
+      if (data.success) {
+        setEmail("");
+        setNewPassword("");
+        setSecret("");
+        setOk(true);
+        setLoading(false);
+      }
     } catch (error) {
-      toast.error(error.response.data, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      console.log(error);
       setLoading(false);
     }
     // console.log(data

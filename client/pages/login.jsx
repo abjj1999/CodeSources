@@ -36,14 +36,18 @@ function Login() {
         user: data.user,
         token: data.token,
       });
+      if (data.error) {
+        toast.error(data.error);
+        setLoading(false);
+      } else {
+        //Save in LocalS
+        window.localStorage.setItem("auth", JSON.stringify(data));
+        router.push("/");
+        setEmail("");
+        setPassword("");
 
-      //Save in LocalS
-      window.localStorage.setItem("auth", JSON.stringify(data));
-      router.push("/");
-      setEmail("");
-      setPassword("");
-
-      setLoading(false);
+        setLoading(false);
+      }
     } catch (error) {
       toast.error(error.response.data, {
         position: "top-center",

@@ -34,12 +34,18 @@ function Register() {
         password,
         secret,
       });
-      setOk(data.ok);
-      setName("");
-      setEmail("");
-      setPassword("");
-      setSecret("");
-      setLoading(false);
+
+      if (data.error) {
+        toast.error(data.error);
+        setLoading(false);
+      } else {
+        setOk(data.ok);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setSecret("");
+        setLoading(false);
+      }
     } catch (error) {
       toast.error(error.response.data, {
         position: "top-center",
