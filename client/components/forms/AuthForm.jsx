@@ -96,7 +96,7 @@ const AuthForm = ({
         <button
           disabled={
             page === "login"
-              ? !email || !password
+              ? !email || !password || loading
               : !name || !email || !secret || !password
           }
           className="btn btn-primary btn-block col-12"
