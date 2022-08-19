@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import { Modal } from "antd";
 import Link from "next/link";
+
 import { UserContext } from "../context";
+import { useRouter } from "next/router";
+import ForgotForm from "../components/forms/forgetForm";
 
-import AuthForm from "../components/forms/AuthForm";
-
-function Login() {
-  const [email, setEmail] = useState("test8@gmail.com");
-  const [password, setPassword] = useState("1234512345");
-  // const [ok, setOk] = useState(false);
+function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [secret, setSecret] = useState("");
+  const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [state, setState] = useContext(UserContext);
   // const data = {
   //   name,
   //   email,
@@ -20,30 +23,22 @@ function Login() {
   //   secret,
   // };
 
-  const [state, setState] = useContext(UserContext);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post(`/login`, {
+      const { data } = await axios.post(`/forgot-password`, {
         email,
-        password,
+        newPassword,
+        secret,
       });
-
-      //populate setState with the data we recieve from BE
-      setState({
-        user: data.user,
-        token: data.token,
-      });
-
-      //Save in LocalS
-      window.localStorage.setItem("auth", JSON.stringify(data));
-      router.push("/");
-      setEmail("");
-      setPassword("");
-
-      setLoading(false);
+      console.log(data);
+      // setOk(data.ok);
+      // setName("");
+      // setEmail("");
+      // setPassword("");
+      // setSecret("");
+      // setLoading(false);
     } catch (error) {
       toast.error(error.response.data, {
         position: "top-center",
@@ -66,45 +61,43 @@ function Login() {
     <div className="container">
       <div className="row">
         <div className="col">
-          <h1 className="display-2 text-center text-info py-4">Login page</h1>
+          <h1 className="display-2 text-center text-info py-4">
+            Forgot Password page
+          </h1>
         </div>
       </div>
       {/* {loading ? <h1>Loading</h1> : ""} */}
       <div className="row py-4">
         <div className="col-md-6 offset-md-3">
-          <AuthForm
+          <ForgotForm
             handleSubmit={handleSubmit}
             email={email}
             setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
+            newPassword={newPassword}
+            setNewPassword={setNewPassword}
+            secret={secret}
+            setSecret={setSecret}
             loading={loading}
-            page="login"
           />
         </div>
       </div>
-
       <div className="row">
         <div className="col">
-          <p className="text-center">
-            Not yet registered
-            <Link href="/register">
-              <a> Sign up Now</a>
+          <Modal
+            title="Congrats"
+            visible={ok}
+            onCancel={() => setOk(false)}
+            footer={null}
+          >
+            <p>You can now login with this password</p>
+            <Link href="/login">
+              <a className="btn btn-primary">Login Now</a>
             </Link>
-          </p>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <p className="text-center">
-            <Link href="/forgot-password">
-              <a className="text-danger">Forgot Password</a>
-            </Link>
-          </p>
+          </Modal>
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default ForgotPassword;
