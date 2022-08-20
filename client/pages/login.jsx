@@ -49,16 +49,7 @@ function Login() {
         setLoading(false);
       }
     } catch (error) {
-      toast.error(error.response.data, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      toast.error(error.response.data);
       setLoading(false);
     }
     // console.log(data
