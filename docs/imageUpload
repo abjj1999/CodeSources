@@ -1,0 +1,5 @@
+upload file using Html input
+send it to server as formdata not a json data
+upload the pic to couldinary
+after upload you will get a successful response
+then using one of the request to retrive that image from BE to the FE

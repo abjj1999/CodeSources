@@ -1,14 +1,22 @@
+import { Avatar } from "antd";
 import React from "react";
 //some packages are not supported by Next
 // we need dynamic from Next to be able to use then
 import dynamic from "next/dynamic";
+import { CameraOutlined, LoadingOutlined } from "@ant-design/icons";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import { Avatar } from "antd";
 
 import "react-quill/dist/quill.snow.css";
 
-const CreatePostForm = ({ content, setContent, postSubmit }) => {
+const CreatePostForm = ({
+  content,
+  setContent,
+  postSubmit,
+  handleImage,
+  uploading,
+  image,
+}) => {
   return (
     <div className="card">
       <div className="card-body pb-4">
@@ -23,7 +31,7 @@ const CreatePostForm = ({ content, setContent, postSubmit }) => {
         </form>
       </div>
 
-      <div className="card-footer">
+      <div className="card-footer d-flex justify-content-between text-muted">
         <button
           disabled={!content}
           onClick={postSubmit}
@@ -31,6 +39,22 @@ const CreatePostForm = ({ content, setContent, postSubmit }) => {
         >
           Post
         </button>
+        <label className="">
+          {image && image.url ? (
+            <Avatar size={30} src={image.url} className="mt-1" />
+          ) : uploading ? (
+            <LoadingOutlined className="mt-2" />
+          ) : (
+            <CameraOutlined className="mt-2" />
+          )}
+          <input
+            onChange={handleImage}
+            type="file"
+            accept="image/*"
+            className="form-control"
+            hidden
+          />
+        </label>
       </div>
     </div>
   );
