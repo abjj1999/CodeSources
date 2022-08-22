@@ -44,3 +44,12 @@ export const uploadImage = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+  }
+};
