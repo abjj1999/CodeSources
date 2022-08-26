@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, uploadImage, getAllPosts } from "../controllers/post";
+import { createPost, uploadImage, PostByUser } from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
 import { requireSignin } from "../middlewares/auth";
@@ -12,6 +12,6 @@ router.post(
   uploadImage
 );
 
-router.get("/getAllposts", getAllPosts);
-
+router.get("/getAllposts", requireSignin, PostByUser);
+PostByUser;
 module.exports = router;
