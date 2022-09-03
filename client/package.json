@@ -17,10 +17,12 @@
         "antd": "^4.22.4",
         "axios": "^0.27.2",
         "bootstrap": "^5.2.0",
+        "moment": "^2.29.4",
         "next": "^12.2.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-quill": "^2.0.0",
+        "react-render-html": "^0.6.0",
         "react-toastify": "^9.0.8"
     }
 }

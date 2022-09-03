@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import UserRoutes from "../../components/routes/UserRoutes";
 import { UserContext } from "../../context";
 import CreatePostForm from "../../components/forms/CreatePostForm";
+import PostList from "../../components/cards/PostList";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,10 +11,23 @@ const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
   const [image, setImage] = useState({});
   const [uploading, setUploading] = useState(false);
+  const [posts, setPosts] = useState([]);
 
   //state,
   const [content, setContent] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    if (state && state.token) fetchUserpost();
+  }, [state && state.token]);
+
+  const fetchUserpost = async () => {
+    try {
+      const { data } = await axios.get("/getAllposts");
+      // console.log(data);
+      setPosts(data);
+    } catch (error) {}
+  };
 
   const postSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +92,10 @@ const Dashboard = () => {
               uploading={uploading}
               image={image}
             />
+            <br />
+            <PostList posts={posts} />
           </div>
+          {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
           <div className="col-md-4 border">Sidebar</div>
         </div>
       </div>
