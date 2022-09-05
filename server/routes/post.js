@@ -5,6 +5,7 @@ import {
   PostByUser,
   userPost,
   updatePost,
+  deletePost,
 } from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
@@ -23,4 +24,10 @@ router.get("/getAllposts", requireSignin, PostByUser);
 router.get("/user-post/:_id", requireSignin, userPost);
 
 router.put("/update-post/:_id", requireSignin, canEditDeletePost, updatePost);
+router.delete(
+  "/delete-post/:_id",
+  requireSignin,
+  canEditDeletePost,
+  deletePost
+);
 module.exports = router;

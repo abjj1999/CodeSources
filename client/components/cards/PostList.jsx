@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import renderHTML from "react-render-html";
 import moment from "moment";
+import axios from "axios";
 import { Avatar } from "antd";
 import PostImage from "../images/PostImage";
 import { useRouter } from "next/router";
+import { Modal } from "antd";
+import { toast } from "react-toastify";
+import DeletePostModel from "../popUps/DeletePostModel";
 import {
   HeartOutlined,
   HeartFilled,
@@ -13,9 +17,25 @@ import {
 } from "@ant-design/icons";
 import { UserContext } from "../../context";
 
-const PostList = ({ posts }) => {
+const PostList = ({ posts, fetchUserpost }) => {
   const [state] = useContext(UserContext);
+  const [open, setOpen] = useState(false);
+  //for deleted post;
+  const [dPost, setDPost] = useState({});
   const router = useRouter();
+  useEffect(() => {
+    if (state && state.token) fetchUserpost();
+  }, [state && state.token]);
+  const handleDelete = async (post) => {
+    try {
+      const { data } = await axios.delete(`/delete-post/${post._id}`);
+      toast.error("Post Deleted");
+      fetchUserpost();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {posts &&
@@ -44,7 +64,13 @@ const PostList = ({ posts }) => {
 
               {state && state.user && state.user._id === post.postedBy._id && (
                 <div className="editandDeleteCont d-flex  justify-content-between">
-                  <DeleteOutlined className="text-danger p-2 h5 mx-auto" />
+                  <DeleteOutlined
+                    onClick={() => {
+                      setOpen(true);
+                      setDPost(post);
+                    }}
+                    className="text-danger p-2 h5 mx-auto"
+                  />
                   <EditOutlined
                     onClick={() => router.push(`/user/post/${post._id}`)}
                     className="text-danger p-2 h5 mx-auto"
@@ -54,6 +80,13 @@ const PostList = ({ posts }) => {
             </div>
           </div>
         ))}
+      <DeletePostModel
+        open={open}
+        setOpen={setOpen}
+        setDPost={setDPost}
+        dPost={dPost}
+        handleDelete={handleDelete}
+      />
     </>
   );
 };

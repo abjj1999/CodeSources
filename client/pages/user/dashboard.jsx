@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [image, setImage] = useState({});
   const [uploading, setUploading] = useState(false);
   const [posts, setPosts] = useState([]);
-
+  const [open, setOpen] = useState(false);
   //state,
   const [content, setContent] = useState("");
   const router = useRouter();
@@ -94,7 +94,7 @@ const Dashboard = () => {
               image={image}
             />
             <br />
-            <PostList posts={posts} />
+            <PostList posts={posts} fetchUserpost={fetchUserpost} />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
           <div className="col-md-4 border">Sidebar</div>
