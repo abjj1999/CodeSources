@@ -1,51 +1,46 @@
-import React, { useContext, useState, useEffect } from "react";
-import UserRoutes from "../../components/routes/UserRoutes";
-import { UserContext } from "../../context";
-import CreatePostForm from "../../components/forms/CreatePostForm";
-import PostList from "../../components/cards/PostList";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import CreatePostForm from "../../../components/forms/CreatePostForm";
+import UserRoutes from "../../../components/routes/UserRoutes";
 import { toast } from "react-toastify";
 
-const Dashboard = () => {
-  const [state, setState] = useContext(UserContext);
+const EditPost = () => {
+  const [post, setPost] = useState({});
+  const [content, setContent] = useState("");
   const [image, setImage] = useState({});
   const [uploading, setUploading] = useState(false);
-  const [posts, setPosts] = useState([]);
-
-  //state,
-  const [content, setContent] = useState("");
   const router = useRouter();
+  const _id = router.query._id;
 
   useEffect(() => {
-    if (state && state.token) fetchUserpost();
-  }, [state && state.token]);
+    if (_id) {
+      fetchPost();
+    }
+  }, [_id]);
 
-  const fetchUserpost = async () => {
+  const fetchPost = async () => {
     try {
-      const { data } = await axios.get("/getAllposts");
-      // console.log(data);
-      setPosts(data);
+      const { data } = await axios.get(`/user-post/${_id}`);
+      setPost(data);
+      setContent(data.content);
+      setImage(data.Image);
     } catch (error) {}
   };
 
   const postSubmit = async (e) => {
     e.preventDefault();
-    // console.log(content);
     try {
-      const { data } = await axios.post("/create-post", {
+      const { data } = await axios.put(`/update-post/${_id}`, {
         content,
         image,
       });
-      console.log("Created post", data);
       if (data.error) {
         toast.error(data.error);
       } else {
-        fetchUserpost();
-        toast.success("Post Created");
-        setContent("");
-        setImage({});
+        toast.success("post updated");
       }
+      router.push("/user/dashboard");
     } catch (error) {
       console.log(error);
     }
@@ -57,8 +52,6 @@ const Dashboard = () => {
 
     let formData = new FormData();
     formData.append("image", file);
-    // formData.append("content", content);
-    // console.log([...formData]);
 
     setUploading(true);
     try {
@@ -67,7 +60,6 @@ const Dashboard = () => {
         url: data.url,
         public_id: data.public_id,
       });
-      // console.log("uploaded image data", data);
       setUploading(false);
     } catch (error) {
       console.log(error);
@@ -80,11 +72,11 @@ const Dashboard = () => {
       <div className="container-fluid">
         <div className="row py-5">
           <div className="col">
-            <h1 className="display-1 text-center">feed</h1>
+            <h1 className="display-1 text-center">Update your Post</h1>
           </div>
         </div>
         <div className="row py-3">
-          <div className="col-md-8">
+          <div className="col-md-8 offset-md-2">
             <CreatePostForm
               content={content}
               setContent={setContent}
@@ -94,14 +86,12 @@ const Dashboard = () => {
               image={image}
             />
             <br />
-            <PostList posts={posts} />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
-          <div className="col-md-4 border">Sidebar</div>
         </div>
       </div>
     </UserRoutes>
   );
 };
 
-export default Dashboard;
+export default EditPost;

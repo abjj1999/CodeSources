@@ -1,8 +1,14 @@
 import express from "express";
-import { createPost, uploadImage, PostByUser } from "../controllers/post";
+import {
+  createPost,
+  uploadImage,
+  PostByUser,
+  userPost,
+  updatePost,
+} from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
-import { requireSignin } from "../middlewares/auth";
+import { canEditDeletePost, requireSignin } from "../middlewares/auth";
 
 router.post("/create-post", requireSignin, createPost);
 router.post(
@@ -13,5 +19,8 @@ router.post(
 );
 
 router.get("/getAllposts", requireSignin, PostByUser);
-PostByUser;
+
+router.get("/user-post/:_id", requireSignin, userPost);
+
+router.put("/update-post/:_id", requireSignin, canEditDeletePost, updatePost);
 module.exports = router;

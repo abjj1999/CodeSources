@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import renderHTML from "react-render-html";
 import moment from "moment";
 import { Avatar } from "antd";
 import PostImage from "../images/PostImage";
-import { HeartOutlined, HeartFilled, CommentOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
+import {
+  HeartOutlined,
+  HeartFilled,
+  CommentOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { UserContext } from "../../context";
+
 const PostList = ({ posts }) => {
+  const [state] = useContext(UserContext);
+  const router = useRouter();
   return (
     <>
       {posts &&
@@ -23,11 +34,23 @@ const PostList = ({ posts }) => {
             <div className="pt-3 ">
               {post.Image && <PostImage url={post.Image.url} />}
             </div>
-            <div className="card-footer d-flex pt-2">
-              <HeartOutlined className="text-danger pt-2 h5" />
-              <div className="p-2">3 likes</div>
-              <CommentOutlined className="text-danger pt-2 h5" />
-              <div className="p-2">3 Comments</div>
+            <div className="card-footer d-flex pt-2 justify-content-between">
+              <div className="likesContainer d-flex">
+                <HeartOutlined className="text-danger pt-2 h5" />
+                <div className="p-2">3 likes</div>
+                <CommentOutlined className="text-danger pt-2 h5" />
+                <div className="p-2">3 Comments</div>
+              </div>
+
+              {state && state.user && state.user._id === post.postedBy._id && (
+                <div className="editandDeleteCont d-flex  justify-content-between">
+                  <DeleteOutlined className="text-danger p-2 h5 mx-auto" />
+                  <EditOutlined
+                    onClick={() => router.push(`/user/post/${post._id}`)}
+                    className="text-danger p-2 h5 mx-auto"
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}
