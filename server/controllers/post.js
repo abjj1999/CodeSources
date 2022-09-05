@@ -69,5 +69,17 @@ export const userPost = async (req, res) => {
   }
 };
 export const updatePost = async (req, res) => {
-  console.log(req.body);
+  try {
+    const { content, image } = req.body;
+    const post = await Post.findByIdAndUpdate(
+      req.params._id,
+      { content, Image: image },
+      {
+        new: true,
+      }
+    );
+    res.json(post);
+  } catch (error) {
+    console.log(error);
+  }
 };
