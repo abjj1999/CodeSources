@@ -23,7 +23,14 @@ const DeletePostModel = ({ setDPost, setOpen, open, dPost, handleDelete }) => {
         >
           Delete
         </button>
-        <button className="btn btn-secondary mx-2">Cancel</button>
+        <button
+          onClick={() => {
+            setOpen(false);
+          }}
+          className="btn btn-secondary mx-2"
+        >
+          Cancel
+        </button>
       </div>
     </Modal>
   );
