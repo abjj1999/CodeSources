@@ -1,6 +1,10 @@
 import User from "../models/User";
 import { hashPassword, comparePassword } from "../helpers/auth";
 import jwt from "jsonwebtoken";
+// import { nanoid } from "nanoid";
+// import { v4 as uuidv4 } from "uuid";
+import ShortUniqueId from "short-unique-id";
+const uid = new ShortUniqueId({ length: 10 });
 
 export const register = async (req, res) => {
   try {
@@ -29,9 +33,16 @@ export const register = async (req, res) => {
     }
     const hasedPW = await hashPassword(password);
 
-    const user = new User({ name, email, password: hasedPW, secret });
+    const user = new User({
+      name,
+      email,
+      password: hasedPW,
+      secret,
+      username: uid(),
+    });
     try {
       await user.save();
+      console.log(user);
       return res.json({
         ok: true,
       });

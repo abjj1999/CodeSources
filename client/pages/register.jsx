@@ -17,12 +17,13 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [state, setState] = useContext(UserContext);
-  // const data = {
-  //   name,
-  //   email,
-  //   password,
-  //   secret,
-  // };
+  const data = {
+    name,
+    email,
+    password,
+    secret,
+  };
+  console.log(data);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
