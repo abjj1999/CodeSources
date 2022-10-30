@@ -59,6 +59,17 @@ const Nav = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link href="/user/profile/update">
+                    <a
+                      className={`nav-link text-light  ${
+                        current === "/user/profile/update" && "active"
+                      }`}
+                    >
+                      <span className="">Profile</span>
+                    </a>
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <a onClick={logOut} className="nav-link text-light">
                     Log OUT
                   </a>

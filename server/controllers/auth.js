@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 // import { nanoid } from "nanoid";
 // import { v4 as uuidv4 } from "uuid";
 import ShortUniqueId from "short-unique-id";
-const uid = new ShortUniqueId({ length: 10 });
+const uid = new ShortUniqueId({ length: 6 });
 
 export const register = async (req, res) => {
   try {

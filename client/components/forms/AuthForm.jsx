@@ -1,5 +1,6 @@
 import React from "react";
 import { SyncOutlined } from "@ant-design/icons";
+import { updateLocale } from "moment";
 const AuthForm = ({
   handleSubmit,
   name,
@@ -12,9 +13,47 @@ const AuthForm = ({
   setSecret,
   loading,
   page,
+  username,
+  setUsername,
+  about,
+  setAbout,
+  profileUpdate,
 }) => {
   return (
     <form onSubmit={handleSubmit}>
+      {profileUpdate && (
+        <div className="form-group p-2">
+          <small>
+            <label htmlFor="" className="text-muted">
+              Username:
+            </label>
+          </small>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            type="text"
+            className="form-control"
+            placeholder="Enter Username"
+          />
+        </div>
+      )}
+      {profileUpdate && (
+        <div className="form-group p-2">
+          <small>
+            <label htmlFor="" className="text-muted">
+              About:
+            </label>
+          </small>
+          <input
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            type="text"
+            className="form-control"
+            placeholder="Tell us about you"
+          />
+        </div>
+      )}
+
       {page !== "login" && (
         <div className="form-group p-2">
           <small>
@@ -43,6 +82,7 @@ const AuthForm = ({
           onChange={(e) => setEmail(e.target.value)}
           className="form-control"
           placeholder="Enter email"
+          disabled={profileUpdate}
         />
       </div>
       <div className="form-group p-2">
@@ -95,7 +135,9 @@ const AuthForm = ({
       <div className="form-group p-2">
         <button
           disabled={
-            page === "login"
+            profileUpdate
+              ? loading
+              : page === "login"
               ? !email || !password || loading
               : !name || !email || !secret || !password
           }
