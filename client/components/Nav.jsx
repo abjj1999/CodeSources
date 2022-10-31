@@ -53,7 +53,7 @@ const Nav = () => {
                       }`}
                     >
                       <span className="">
-                        {state && state.user && state.user.name}
+                        {state && state.user && state.user.username}
                       </span>
                     </a>
                   </Link>

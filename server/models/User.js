@@ -30,7 +30,10 @@ const userSchema = new Schema(
       required: true,
     },
     about: {},
-    photo: String,
+    image: {
+      url: String,
+      public_id: String,
+    },
     following: [
       {
         type: mongoose.Schema.ObjectId,
