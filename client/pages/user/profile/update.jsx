@@ -49,16 +49,23 @@ function Update() {
         password,
         secret,
       });
-
+      console.log(data);
       if (data.error) {
         toast.error(data.error);
         setLoading(false);
       } else {
-        setOk(data.ok);
+        setOk(true);
         setLoading(false);
+        //update localstorge and user, keep token
+        let auth = JSON.parse(localStorage.getItem("auth"));
+        auth.user = data;
+        localStorage.setItem("auth", JSON.stringify(auth));
+
+        //update context
+        setSecret({ ...state, user: data });
       }
     } catch (error) {
-      toast.error(error.response.data);
+      // toast.error(error.response.data);
       setLoading(false);
     }
     // console.log(data
@@ -103,21 +110,8 @@ function Update() {
             onCancel={() => setOk(false)}
             footer={null}
           >
-            <p>you have seccussflly registered</p>
-            <Link href="/login">
-              <a className="btn btn-primary">Login Now</a>
-            </Link>
+            <p>you have seccussflly updated your profile</p>
           </Modal>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <p className="text-center">
-            Already registered?
-            <Link href="/login">
-              <a> Login Now</a>
-            </Link>
-          </p>
         </div>
       </div>
     </div>
