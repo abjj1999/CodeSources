@@ -197,3 +197,16 @@ export const profileUpdate = async (req, res) => {
     console.log(error);
   }
 };
+
+export const findPeople = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    //already followed user list
+    let followingList = user.following;
+    followingList.push(req.user._id);
+    const others = await User.find({ _id: { $nin: followingList } }).limit(10);
+    res.json(others);
+  } catch (error) {
+    console.log(error);
+  }
+};

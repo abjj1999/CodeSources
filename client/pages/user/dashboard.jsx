@@ -6,6 +6,7 @@ import PostList from "../../components/cards/PostList";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import People from "../../components/People/People";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -16,10 +17,22 @@ const Dashboard = () => {
   //state,
   const [content, setContent] = useState("");
   const router = useRouter();
-
+  const [people, setPeople] = useState([]);
   useEffect(() => {
-    if (state && state.token) fetchUserpost();
+    if (state && state.token) {
+      fetchUserpost();
+      findPeople();
+    }
   }, [state && state.token]);
+
+  const findPeople = async () => {
+    try {
+      const { data } = await axios.get("/find-people");
+      setPeople(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchUserpost = async () => {
     try {
@@ -97,7 +110,9 @@ const Dashboard = () => {
             <PostList posts={posts} fetchUserpost={fetchUserpost} />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
-          <div className="col-md-4 border">Sidebar</div>
+          <div className="col-md-4 border">
+            <People people={people} />
+          </div>
         </div>
       </div>
     </UserRoutes>
