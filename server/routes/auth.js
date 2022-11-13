@@ -10,6 +10,7 @@ import {
   findPeople,
   addFollower,
   userFollow,
+  getFollowings,
 } from "../controllers/auth";
 import { requireSignin } from "../middlewares/auth";
 
@@ -21,4 +22,5 @@ router.get("/current-user", requireSignin, currentUser);
 router.put("/profile-update", requireSignin, profileUpdate);
 router.get("/find-people", requireSignin, findPeople);
 router.put("/user-follow", requireSignin, addFollower, userFollow);
+router.get("/user-following", requireSignin, getFollowings);
 module.exports = router;

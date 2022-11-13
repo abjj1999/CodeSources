@@ -240,3 +240,15 @@ export const userFollow = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getFollowings = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const following = await User.find({ _id: user.following })
+      .select("-password -secret")
+      .limit(10);
+    res.json(following);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import People from "../../components/People/People";
+import Link from "next/link";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -108,7 +109,13 @@ const Dashboard = () => {
       setUploading(false);
     }
   };
-
+  const updateCounters = () => {
+    if (!state.user.following) {
+      return 0;
+    } else {
+      return state.user.following.length;
+    }
+  };
   return (
     <UserRoutes>
       <div className="container-fluid">
@@ -132,6 +139,27 @@ const Dashboard = () => {
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
           <div className="col-md-4 border">
+            {state && state.user && updateCounters() > 0 ? (
+              <Link href={`/user/following`} className="btn ">
+                <a className=" ">
+                  <h4 className="text-muted text-center ">You Have </h4>
+                  <h5 className="text-center text-light rounded bg-dark p-2">
+                    <span className="font-weight-bold font-italic">
+                      {updateCounters()}
+                    </span>{" "}
+                    Followings
+                  </h5>
+                </a>
+              </Link>
+            ) : (
+              <>
+                <h5 className="text-center text-dark">You have 0 followings</h5>
+
+                <h6 className="text-center text-dark mb-4 ">
+                  Add people you know
+                </h6>
+              </>
+            )}
             <People people={people} handleFollow={handleFollow} />
           </div>
         </div>
