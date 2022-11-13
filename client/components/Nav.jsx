@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { UserContext } from "../context";
 import { useRouter } from "next/router";
+import { Avatar } from "antd";
 
 const Nav = () => {
   const [current, setCurrent] = useState("");
@@ -22,7 +23,10 @@ const Nav = () => {
     <nav className="navbar navbar-expand-lg bg-dark d-flex justify-content-between  ">
       <div className="container-fluid ">
         <Link href="/">
-          <a className="navbar-brand text-light">Navbar</a>
+          <a className="navbar-brand text-light">
+            <Avatar src="/images/logo.png" />
+            Navbar
+          </a>
         </Link>
         <button
           className="navbar-toggler"

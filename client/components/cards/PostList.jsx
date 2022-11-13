@@ -17,20 +17,20 @@ import {
 } from "@ant-design/icons";
 import { UserContext } from "../../context";
 
-const PostList = ({ posts, fetchUserpost }) => {
+const PostList = ({ posts, newsFeed }) => {
   const [state] = useContext(UserContext);
   const [open, setOpen] = useState(false);
   //for deleted post;
   const [dPost, setDPost] = useState({});
   const router = useRouter();
   useEffect(() => {
-    if (state && state.token) fetchUserpost();
+    if (state && state.token) newsFeed();
   }, [state && state.token]);
   const handleDelete = async (post) => {
     try {
       const { data } = await axios.delete(`/delete-post/${post._id}`);
       toast.error("Post Deleted");
-      fetchUserpost();
+      newsFeed();
     } catch (error) {
       console.log(error);
     }

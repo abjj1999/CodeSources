@@ -20,7 +20,7 @@ const Dashboard = () => {
   const [people, setPeople] = useState([]);
   useEffect(() => {
     if (state && state.token) {
-      fetchUserpost();
+      newsFeed();
       findPeople();
     }
   }, [state && state.token]);
@@ -33,13 +33,34 @@ const Dashboard = () => {
       console.log(error);
     }
   };
-
-  const fetchUserpost = async () => {
+  const newsFeed = async () => {
     try {
-      const { data } = await axios.get("/getAllposts");
+      const { data } = await axios.get("/newsfeed");
       // console.log(data);
       setPosts(data);
     } catch (error) {}
+  };
+
+  const handleFollow = async (user) => {
+    // console.log(user);
+    try {
+      const { data } = await axios.put("/user-follow", { _id: user._id });
+      // console.log("follow res coming back from be => ", data);
+      //localStorage updating user, but keeping the token
+      let auth = JSON.parse(localStorage.getItem("auth"));
+      auth.user = data;
+      localStorage.setItem("auth", JSON.stringify(auth));
+      //uodating the state
+      setState({ ...state, user: data });
+      // uodate people statuses
+      let filtered = people.filter((p) => p._id !== user._id);
+      setPeople(filtered);
+      //reRender post by following array
+      newsFeed();
+      toast.success(`Following ${user.name}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const postSubmit = async (e) => {
@@ -50,11 +71,11 @@ const Dashboard = () => {
         content,
         image,
       });
-      console.log("Created post", data);
+      // console.log("Created post", data);
       if (data.error) {
         toast.error(data.error);
       } else {
-        fetchUserpost();
+        newsFeed();
         toast.success("Post Created");
         setContent("");
         setImage({});
@@ -107,11 +128,11 @@ const Dashboard = () => {
               image={image}
             />
             <br />
-            <PostList posts={posts} fetchUserpost={fetchUserpost} />
+            <PostList posts={posts} newsFeed={newsFeed} />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
           <div className="col-md-4 border">
-            <People people={people} />
+            <People people={people} handleFollow={handleFollow} />
           </div>
         </div>
       </div>

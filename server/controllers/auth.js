@@ -204,8 +204,38 @@ export const findPeople = async (req, res) => {
     //already followed user list
     let followingList = user.following;
     followingList.push(req.user._id);
-    const others = await User.find({ _id: { $nin: followingList } }).limit(10);
+    const others = await User.find({ _id: { $nin: followingList } })
+      .select("-password -secret")
+      .limit(10);
     res.json(others);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//addFollower middleware
+export const addFollower = async (req, res, next) => {
+  //
+  try {
+    const user = await User.findByIdAndUpdate(req.body._id, {
+      $addToSet: { followers: req.user._id },
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const userFollow = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { following: req.body._id },
+      },
+      { new: true }
+    ).select("-password -secret");
+    res.json(user);
   } catch (error) {
     console.log(error);
   }

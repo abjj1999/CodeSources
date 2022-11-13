@@ -6,6 +6,7 @@ import {
   userPost,
   updatePost,
   deletePost,
+  newsFeed,
 } from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
@@ -30,4 +31,6 @@ router.delete(
   canEditDeletePost,
   deletePost
 );
+
+router.get("/newsfeed", requireSignin, newsFeed);
 module.exports = router;

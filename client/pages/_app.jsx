@@ -8,6 +8,7 @@ import "antd/dist/antd.css";
 import Head from "next/head";
 import Script from "next/script";
 import { UserProvider } from "../context";
+import "../public/css/styles.css";
 
 function MyApp({ Component, pageProps }) {
   return (

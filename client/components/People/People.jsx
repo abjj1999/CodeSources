@@ -4,10 +4,17 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { UserContext } from "../../context";
 
-const People = ({ people }) => {
+const People = ({ people, handleFollow }) => {
   const [state] = useContext(UserContext);
-
+  const imageSrc = (user) => {
+    if (user.image) {
+      return user.image.url;
+    } else {
+      return "/images/logo.png";
+    }
+  };
   const router = useRouter();
+
   return (
     <div>
       <List
@@ -16,11 +23,19 @@ const People = ({ people }) => {
         renderItem={(p) => (
           <List.Item>
             <List.Item.Meta
+              avatar={<Avatar src={imageSrc(p)} />}
               title={
                 <div className="d-flex justify-content-between">
-                  {p.username} <span className="text-primary">Follow</span>
+                  {p.username}{" "}
+                  <span
+                    className="text-primary pointer"
+                    onClick={() => handleFollow(p)}
+                  >
+                    Follow
+                  </span>
                 </div>
               }
+              description={p.name}
             />
           </List.Item>
         )}
