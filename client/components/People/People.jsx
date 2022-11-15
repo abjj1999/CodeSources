@@ -3,16 +3,10 @@ import { Avatar, List } from "antd";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { UserContext } from "../../context";
-
+import { imageSrc } from "../../functions";
 const People = ({ people, handleFollow }) => {
   const [state] = useContext(UserContext);
-  const imageSrc = (user) => {
-    if (user.image) {
-      return user.image.url;
-    } else {
-      return "/images/logo.png";
-    }
-  };
+
   const router = useRouter();
 
   return (

@@ -16,8 +16,9 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { UserContext } from "../../context";
+import { imageSrc } from "../../functions";
 
-const PostList = ({ posts, newsFeed }) => {
+const PostList = ({ posts, newsFeed, handleLike, handleUnlike }) => {
   const [state] = useContext(UserContext);
   const [open, setOpen] = useState(false);
   //for deleted post;
@@ -42,9 +43,15 @@ const PostList = ({ posts, newsFeed }) => {
         posts.map((post) => (
           <div className="card mb-5" key={post._id}>
             <div className="card-header">
-              <Avatar size={40} className="mb-2">
+              {/* <Avatar size={40} className="mb-2">
                 {post.postedBy.name[0]}
-              </Avatar>
+              </Avatar> */}
+              <Avatar
+                size={40}
+                className="mb-2"
+                src={imageSrc(post.postedBy)}
+              />
+
               <span className="p-2 ml-5">{post.postedBy.name}</span>
               <span className="p-2 ml-5">
                 {moment(post.createdAt).fromNow()}
@@ -56,8 +63,18 @@ const PostList = ({ posts, newsFeed }) => {
             </div>
             <div className="card-footer d-flex pt-2 justify-content-between">
               <div className="likesContainer d-flex">
-                <HeartOutlined className="text-danger pt-2 h5" />
-                <div className="p-2">3 likes</div>
+                {post.likes.includes(state.user._id) ? (
+                  <HeartFilled
+                    onClick={() => handleUnlike(post._id)}
+                    className="text-danger pt-2 h5"
+                  />
+                ) : (
+                  <HeartOutlined
+                    onClick={() => handleLike(post._id)}
+                    className="text-danger pt-2 h5"
+                  />
+                )}
+                <div className="p-2">{post.likes.length} likes</div>
                 <CommentOutlined className="text-danger pt-2 h5" />
                 <div className="p-2">3 Comments</div>
               </div>

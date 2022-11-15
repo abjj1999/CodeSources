@@ -252,3 +252,29 @@ export const getFollowings = async (req, res) => {
     console.log(error);
   }
 };
+
+export const removeFollower = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.body._id, {
+      $pull: { followers: req.user._id },
+    });
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const userUnfollow = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { following: req.body._id },
+      },
+      { new: true }
+    ).select("-password -secret");
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -114,3 +114,31 @@ export const newsFeed = async (req, res) => {
     console.log(error);
   }
 };
+
+export const likePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.body._id,
+      { $addToSet: { likes: req.user._id } },
+      { new: true }
+    );
+
+    res.json(post);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unlikePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.body._id,
+      { $pull: { likes: req.user._id } },
+      { new: true }
+    );
+
+    res.json(post);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -4,10 +4,11 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { UserContext } from "../../context";
 import axios from "axios";
+import { toast } from "react-toastify";
 import Link from "next/link";
 import { ArrowLeftOutlined, RollbackOutlined } from "@ant-design/icons";
 const Following = () => {
-  const [state] = useContext(UserContext);
+  const [state, setState] = useContext(UserContext);
   const [people, setPeople] = useState([]);
 
   //to fetch followings we have to use UseEffect
@@ -35,10 +36,34 @@ const Following = () => {
   };
   const router = useRouter();
 
-  const handleFollow = async () => {};
+  const handleUnfollow = async (user) => {
+    try {
+      const { data } = await axios.put("/user-unfollow", { _id: user._id });
+      console.log(data);
+      //localStorage updating user, but keeping the token
+      let auth = JSON.parse(localStorage.getItem("auth"));
+      auth.user = data;
+      localStorage.setItem("auth", JSON.stringify(auth));
+      //uodating the state
+      setState({ ...state, user: data });
+      // uodate people statuses
+      let filtered = people.filter((p) => p._id !== user._id);
+      setPeople(filtered);
+      //reRender post by following array
+      // newsFeed();
+      toast.error(`Unfollowed ${user.name}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="row col-md-6 offset-md-3">
+      <Link href={`/user/dashboard`}>
+        <a class=" w-25 text-secondary  d-flex justify-content-start pt-2 backBtn mt-3">
+          <ArrowLeftOutlined style={{ fontSize: "120%" }} className="p-1" />
+        </a>
+      </Link>
       <List
         itemLayout="horizontal"
         dataSource={people}
@@ -51,7 +76,7 @@ const Following = () => {
                   {p.username}{" "}
                   <span
                     className="text-danger pointer"
-                    onClick={() => handleFollow(p)}
+                    onClick={() => handleUnfollow(p)}
                   >
                     UnFollow
                   </span>
@@ -62,11 +87,6 @@ const Following = () => {
           </List.Item>
         )}
       />
-      <Link href={`/user/dashboard`}>
-        <a class=" w-25 text-secondary  d-flex justify-content-start pt-2 backBtn">
-          <ArrowLeftOutlined style={{ fontSize: "120%" }} className="p-1" />
-        </a>
-      </Link>
     </div>
   );
 };
