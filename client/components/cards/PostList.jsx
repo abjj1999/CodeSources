@@ -5,7 +5,6 @@ import axios from "axios";
 import { Avatar } from "antd";
 import PostImage from "../images/PostImage";
 import { useRouter } from "next/router";
-import { Modal } from "antd";
 import { toast } from "react-toastify";
 import DeletePostModel from "../popUps/DeletePostModel";
 import {
@@ -17,8 +16,14 @@ import {
 } from "@ant-design/icons";
 import { UserContext } from "../../context";
 import { imageSrc } from "../../functions";
-
-const PostList = ({ posts, newsFeed, handleLike, handleUnlike }) => {
+import Link from "next/link";
+const PostList = ({
+  posts,
+  newsFeed,
+  handleLike,
+  handleUnlike,
+  handleComment,
+}) => {
   const [state] = useContext(UserContext);
   const [open, setOpen] = useState(false);
   //for deleted post;
@@ -63,7 +68,10 @@ const PostList = ({ posts, newsFeed, handleLike, handleUnlike }) => {
             </div>
             <div className="card-footer d-flex pt-2 justify-content-between">
               <div className="likesContainer d-flex">
-                {post.likes.includes(state.user._id) ? (
+                {state &&
+                state.user &&
+                post.likes &&
+                post.likes.includes(state.user._id) ? (
                   <HeartFilled
                     onClick={() => handleUnlike(post._id)}
                     className="text-danger pt-2 h5"
@@ -75,8 +83,15 @@ const PostList = ({ posts, newsFeed, handleLike, handleUnlike }) => {
                   />
                 )}
                 <div className="p-2">{post.likes.length} likes</div>
-                <CommentOutlined className="text-danger pt-2 h5" />
-                <div className="p-2">3 Comments</div>
+                <CommentOutlined
+                  onClick={() => handleComment(post)}
+                  className="text-danger pt-2 h5"
+                />
+                <div className="p-2">
+                  <Link href={`/post/${post._id}`}>
+                    <a>{post.comments.length} Comments</a>
+                  </Link>
+                </div>
               </div>
 
               {state && state.user && state.user._id === post.postedBy._id && (
@@ -95,6 +110,29 @@ const PostList = ({ posts, newsFeed, handleLike, handleUnlike }) => {
                 </div>
               )}
             </div>
+            {/* comments */}
+            {post.comments && post.comments.length > 0 && (
+              <ol className="list-group">
+                {post.comments.map((comment) => (
+                  <li className="list-group-item d-flex justify-content-between align-items-start">
+                    <div className="ms-2 me-auto">
+                      <div className="d-flex ">
+                        <Avatar
+                          size={20}
+                          className="mb-1 mr-3"
+                          src={imageSrc(comment.postedBy)}
+                        />
+                        <h6 className="m-1">{comment.postedBy.name}</h6>
+                      </div>
+                      <div>{comment.text}</div>
+                    </div>
+                    <span className="badge text-muted rounded-pill">
+                      {moment(comment.created).fromNow()}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            )}
           </div>
         ))}
       <DeletePostModel

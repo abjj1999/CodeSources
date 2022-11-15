@@ -106,6 +106,7 @@ export const newsFeed = async (req, res) => {
 
     const posts = await Post.find({ postedBy: { $in: following } })
       .populate("postedBy", "_id name image")
+      .populate("comments.postedBy", "_id name image")
       .sort({ createdAt: -1 })
       .limit(10);
 
@@ -138,6 +139,42 @@ export const unlikePost = async (req, res) => {
     );
 
     res.json(post);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addComment = async (req, res) => {
+  try {
+    const { postId, comment } = req.body;
+
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: { comments: { text: comment, postedBy: req.user._id } },
+      },
+      { new: true }
+    )
+      .populate("postedBy", "_id name image")
+      .populate("comments.postedBy", "_id name image");
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeComment = async (req, res) => {
+  try {
+    const { postId, comment } = req.body;
+
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $pull: { comments: { _id: comment._id } },
+      },
+      { new: true }
+    );
+    res.json(result);
   } catch (error) {
     console.log(error);
   }

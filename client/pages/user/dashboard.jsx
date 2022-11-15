@@ -8,6 +8,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import People from "../../components/People/People";
 import Link from "next/link";
+import { Modal } from "antd";
+import CommentForm from "../../components/forms/CommentForm";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -19,6 +21,10 @@ const Dashboard = () => {
   const [content, setContent] = useState("");
   const router = useRouter();
   const [people, setPeople] = useState([]);
+  const [comment, setComment] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [currentPost, setCurrentPost] = useState({});
+
   useEffect(() => {
     if (state && state.token) {
       newsFeed();
@@ -137,6 +143,32 @@ const Dashboard = () => {
     }
   };
 
+  //comment functions
+  const handleComment = (post) => {
+    setCurrentPost(post);
+    setVisible(true);
+    // console.log(post);
+  };
+
+  const addComment = async (e) => {
+    e.preventDefault();
+    // console.log("add comment to this post", currentPost._id);
+    // console.log(comment);
+    try {
+      const { data } = await axios.put("/add-comment", {
+        postId: currentPost._id,
+        comment,
+      });
+      // console.log("added comment ", data);
+      setComment("");
+      setVisible(false);
+      newsFeed();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const RemoveComment = async () => {};
+
   return (
     <UserRoutes>
       <div className="container-fluid">
@@ -161,6 +193,7 @@ const Dashboard = () => {
               handleUnlike={handleUnlike}
               posts={posts}
               newsFeed={newsFeed}
+              handleComment={handleComment}
             />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
@@ -189,6 +222,18 @@ const Dashboard = () => {
             <People people={people} handleFollow={handleFollow} />
           </div>
         </div>
+        <Modal
+          visible={visible}
+          onCancel={() => setVisible(false)}
+          title="Comment"
+          footer={null}
+        >
+          <CommentForm
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+          />
+        </Modal>
       </div>
     </UserRoutes>
   );

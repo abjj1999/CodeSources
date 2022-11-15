@@ -42,7 +42,7 @@ function Login() {
       } else {
         //Save in LocalS
         window.localStorage.setItem("auth", JSON.stringify(data));
-        router.push("/");
+        router.push("/user/dashboard");
         setEmail("");
         setPassword("");
 
@@ -55,7 +55,7 @@ function Login() {
     // console.log(data
   };
 
-  if (state && state.token) router.push("/");
+  if (state && state.token) router.push("/user/dashboard");
 
   return (
     <div className="container">
