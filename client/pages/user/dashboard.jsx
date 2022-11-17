@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import People from "../../components/People/People";
 import Link from "next/link";
-import { Modal } from "antd";
+import Pagination from "@mui/material/Pagination";
 import CommentForm from "../../components/forms/CommentForm";
 import CommentM from "../../components/popUps/CommentM";
 
@@ -25,13 +25,26 @@ const Dashboard = () => {
   const [comment, setComment] = useState("");
   const [visible, setVisible] = useState(false);
   const [currentPost, setCurrentPost] = useState({});
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (state && state.token) {
       newsFeed();
       findPeople();
     }
-  }, [state && state.token]);
+  }, [state && state.token, page]);
+
+  useEffect(() => {
+    try {
+      axios.get("/total-posts").then(({ data }) => {
+        console.log(data);
+        setTotalPosts(data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const findPeople = async () => {
     try {
@@ -43,10 +56,13 @@ const Dashboard = () => {
   };
   const newsFeed = async () => {
     try {
-      const { data } = await axios.get("/newsfeed");
-      // console.log(data);
+      // console.log(page);
+      const { data } = await axios.get(`/newsfeed/${page}`);
+      console.log(data);
       setPosts(data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleFollow = async (user) => {
@@ -178,7 +194,13 @@ const Dashboard = () => {
       console.log(error);
     }
   };
-  const RemoveComment = async () => {};
+
+  const paginate = (e, value) => {
+    // setCurrentPage(value);
+    console.log(value);
+    setPage(value);
+    // window.scrollTo({ top: 1800, behavior: "smooth" });
+  };
 
   return (
     <UserRoutes>
@@ -211,6 +233,16 @@ const Dashboard = () => {
               addComment={addComment}
               setVisible={setVisible}
               comment={comment}
+            />
+
+            <Pagination
+              color="standard"
+              shape="rounded"
+              defaultPage={page}
+              count={Math.ceil(totalPosts / 3)}
+              page={page}
+              onChange={paginate}
+              size="large"
             />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}

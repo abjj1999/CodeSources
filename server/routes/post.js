@@ -11,6 +11,7 @@ import {
   unlikePost,
   addComment,
   removeComment,
+  totalPost,
 } from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
@@ -36,10 +37,10 @@ router.delete(
   deletePost
 );
 
-router.get("/newsfeed", requireSignin, newsFeed);
+router.get("/newsfeed/:page", requireSignin, newsFeed);
 router.put("/like-post", requireSignin, likePost);
 router.put("/unlike-post", requireSignin, unlikePost);
 router.put("/add-comment", requireSignin, addComment);
 router.put("/remove-comment", requireSignin, removeComment);
-
+router.get("/total-posts", totalPost);
 module.exports = router;
