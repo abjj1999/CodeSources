@@ -234,16 +234,17 @@ const Dashboard = () => {
               setVisible={setVisible}
               comment={comment}
             />
-
-            <Pagination
-              color="standard"
-              shape="rounded"
-              defaultPage={page}
-              count={Math.ceil(totalPosts / 3)}
-              page={page}
-              onChange={paginate}
-              size="large"
-            />
+            <div className="d-flex justify-content-center">
+              <Pagination
+                color="standard"
+                shape="rounded"
+                defaultPage={page}
+                count={Math.ceil(totalPosts / 3)}
+                page={page}
+                onChange={paginate}
+                size="large"
+              />
+            </div>
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
           <div className="col-md-4 border">
