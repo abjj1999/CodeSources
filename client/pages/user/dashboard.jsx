@@ -10,6 +10,7 @@ import People from "../../components/People/People";
 import Link from "next/link";
 import { Modal } from "antd";
 import CommentForm from "../../components/forms/CommentForm";
+import CommentM from "../../components/popUps/CommentM";
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -150,6 +151,16 @@ const Dashboard = () => {
     // console.log(post);
   };
 
+  const handleDelete = async (post) => {
+    try {
+      const { data } = await axios.delete(`/delete-post/${post._id}`);
+      // toast.error("Post Deleted");
+      newsFeed();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const addComment = async (e) => {
     e.preventDefault();
     // console.log("add comment to this post", currentPost._id);
@@ -194,6 +205,12 @@ const Dashboard = () => {
               posts={posts}
               newsFeed={newsFeed}
               handleComment={handleComment}
+              handleDelete={handleDelete}
+              visible={visible}
+              setComment={setComment}
+              addComment={addComment}
+              setVisible={setVisible}
+              comment={comment}
             />
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
@@ -222,18 +239,13 @@ const Dashboard = () => {
             <People people={people} handleFollow={handleFollow} />
           </div>
         </div>
-        <Modal
+        <CommentM
           visible={visible}
-          onCancel={() => setVisible(false)}
-          title="Comment"
-          footer={null}
-        >
-          <CommentForm
-            comment={comment}
-            setComment={setComment}
-            addComment={addComment}
-          />
-        </Modal>
+          setComment={setComment}
+          addComment={addComment}
+          setVisible={setVisible}
+          comment={comment}
+        />
       </div>
     </UserRoutes>
   );

@@ -5,3 +5,12 @@ export const imageSrc = (user) => {
     return "/images/logo.png";
   }
 };
+
+export const findPeople = async () => {
+  try {
+    const { data } = await axios.get("/find-people");
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
