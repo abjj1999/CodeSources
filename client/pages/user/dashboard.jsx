@@ -103,6 +103,7 @@ const Dashboard = () => {
         toast.success("Post Created");
         setContent("");
         setImage({});
+        setPage(1);
       }
     } catch (error) {
       console.log(error);
@@ -221,6 +222,18 @@ const Dashboard = () => {
               image={image}
             />
             <br />
+            <div className="d-flex justify-content-center mb-2">
+              <Pagination
+                color="standard"
+                shape="rounded"
+                defaultPage={page}
+                count={Math.ceil(totalPosts / 3)}
+                page={page}
+                onChange={paginate}
+                size="large"
+                disabled
+              />
+            </div>
             <PostList
               handleLike={handleLike}
               handleUnlike={handleUnlike}
@@ -234,7 +247,7 @@ const Dashboard = () => {
               setVisible={setVisible}
               comment={comment}
             />
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center mb-3">
               <Pagination
                 color="standard"
                 shape="rounded"
