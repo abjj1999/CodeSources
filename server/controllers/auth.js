@@ -278,3 +278,20 @@ export const userUnfollow = async (req, res) => {
     console.log(error);
   }
 };
+
+export const searchUser = async (req, res) => {
+  const { query } = req.params;
+  if (!query) return;
+  //
+  try {
+    const user = await User.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { username: { $regex: query, $options: "i" } },
+      ],
+    }).select("-password -secret");
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};

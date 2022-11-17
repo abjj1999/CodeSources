@@ -4,7 +4,7 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { UserContext } from "../../context";
 import { imageSrc } from "../../functions";
-const People = ({ people, handleFollow }) => {
+const People = ({ people, handleFollow, handleUnfollow }) => {
   const [state] = useContext(UserContext);
 
   const router = useRouter();
@@ -21,12 +21,24 @@ const People = ({ people, handleFollow }) => {
               title={
                 <div className="d-flex justify-content-between">
                   {p.username}{" "}
-                  <span
-                    className="text-primary pointer"
-                    onClick={() => handleFollow(p)}
-                  >
-                    Follow
-                  </span>
+                  {state &&
+                  state.user &&
+                  p.followers &&
+                  p.followers.includes(state.user._id) ? (
+                    <span
+                      onClick={() => handleUnfollow(p)}
+                      className="text-primary pointer"
+                    >
+                      Unfollow
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => handleFollow(p)}
+                      className="text-primary pointer"
+                    >
+                      Follow
+                    </span>
+                  )}
                 </div>
               }
               description={p.name}

@@ -11,7 +11,7 @@ import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
 import CommentForm from "../../components/forms/CommentForm";
 import CommentM from "../../components/popUps/CommentM";
-
+import Search from "../../components/Search";
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
   const [image, setImage] = useState({});
@@ -261,6 +261,8 @@ const Dashboard = () => {
           </div>
           {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
           <div className="col-md-4 border">
+            <Search newsFeed={newsFeed} />
+            <br />
             {state && state.user && updateCounters() > 0 ? (
               <Link href={`/user/following`} className="btn ">
                 <a className=" ">
