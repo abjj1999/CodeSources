@@ -14,6 +14,7 @@ import {
   userUnfollow,
   removeFollower,
   searchUser,
+  getUser,
 } from "../controllers/auth";
 import { requireSignin } from "../middlewares/auth";
 
@@ -29,4 +30,5 @@ router.get("/user-following", requireSignin, getFollowings);
 router.put("/user-unfollow", requireSignin, removeFollower, userUnfollow);
 
 router.get("/search-user/:query", requireSignin, searchUser);
+router.get("/user/:username", getUser);
 module.exports = router;

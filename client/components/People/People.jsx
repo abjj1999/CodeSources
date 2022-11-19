@@ -4,6 +4,7 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { UserContext } from "../../context";
 import { imageSrc } from "../../functions";
+import Link from "next/link";
 const People = ({ people, handleFollow, handleUnfollow }) => {
   const [state] = useContext(UserContext);
 
@@ -20,7 +21,9 @@ const People = ({ people, handleFollow, handleUnfollow }) => {
               avatar={<Avatar src={imageSrc(p)} />}
               title={
                 <div className="d-flex justify-content-between">
-                  {p.username}{" "}
+                  <Link href={`/user/${p.username}`}>
+                    <a>{p.username}</a>
+                  </Link>
                   {state &&
                   state.user &&
                   p.followers &&

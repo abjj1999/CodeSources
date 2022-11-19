@@ -195,3 +195,5 @@ export const totalPost = async (req, res) => {
     console.log(error);
   }
 };
+//add later
+export const getPostsUsername = async (req, res) => {};
