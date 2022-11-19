@@ -5,11 +5,12 @@ function Home() {
   const [state, setState] = useContext(UserContext);
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row">
         <div className="col">
-          <h1 className="display-1 text-center py-5">Hello to Code Sources</h1>
-          <p>{JSON.stringify(state)}</p>
+          <h1 className="display-1 font-weight-bold text-center py-5">
+            Code Sources
+          </h1>
         </div>
       </div>
     </div>
