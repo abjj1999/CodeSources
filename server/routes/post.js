@@ -13,6 +13,7 @@ import {
   removeComment,
   totalPost,
   getPostsUsername,
+  posts,
 } from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
@@ -45,4 +46,5 @@ router.put("/add-comment", requireSignin, addComment);
 router.put("/remove-comment", requireSignin, removeComment);
 router.get("/total-posts", totalPost);
 router.get("/posts/:username", getPostsUsername);
+router.get("/posts", posts);
 module.exports = router;
