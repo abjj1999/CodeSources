@@ -14,6 +14,7 @@ import {
   totalPost,
   getPostsUsername,
   posts,
+  getpostById,
 } from "../controllers/post";
 import formidable from "express-formidable";
 const router = express.Router();
@@ -47,4 +48,5 @@ router.put("/remove-comment", requireSignin, removeComment);
 router.get("/total-posts", totalPost);
 router.get("/posts/:username", getPostsUsername);
 router.get("/posts", posts);
+router.get("/post/:_id", getpostById);
 module.exports = router;
