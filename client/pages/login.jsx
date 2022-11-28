@@ -8,8 +8,8 @@ import { UserContext } from "../context";
 import AuthForm from "../components/forms/AuthForm";
 
 function Login() {
-  const [email, setEmail] = useState("test8@gmail.com");
-  const [password, setPassword] = useState("1234512345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   // const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
