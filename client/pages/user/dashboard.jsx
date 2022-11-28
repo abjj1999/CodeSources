@@ -14,9 +14,15 @@ import CommentM from "../../components/popUps/CommentM";
 import Search from "../../components/Search";
 import io from "socket.io-client";
 
-const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
-  reconnection: true,
-});
+const socket = io(
+  process.env.NEXT_PUBLIC_SOCKETIO,
+  {
+    path: "/socket.io",
+  },
+  {
+    reconnection: true,
+  }
+);
 
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
@@ -105,7 +111,6 @@ const Dashboard = () => {
       if (data.error) {
         toast.error(data.error);
       } else {
-        
         newsFeed();
         toast.success("Post Created");
         setContent("");

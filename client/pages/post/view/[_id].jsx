@@ -63,9 +63,7 @@ function singlePost({ post }) {
   );
 }
 export async function getServerSideProps(cont) {
-  const { data } = await axios.get(
-    `http://localhost:8000/api/post/${cont.params._id}`
-  );
+  const { data } = await axios.get(`/post/${cont.params._id}`);
   // console.log(data);
   return {
     props: { post: data }, // will be passed to the page component as props

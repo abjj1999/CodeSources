@@ -11,6 +11,7 @@ require("dotenv").config();
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
+  path: "/socket.io",
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
@@ -23,6 +24,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     // UseFindAndModify: true,
+    // useCreateIndex: true,
   })
   .then(() => {
     console.log("DB connected");
@@ -54,15 +56,6 @@ io.on("connect", (socket) => {
     socket.broadcast.emit("new-post-home", newPost);
   });
 });
-
-// socket.io
-// io.on("connect", (socket) => {
-//   // console.log("Socket connected", socket.id);
-//   socket.on("hello-from-home-page", (data) => {
-//     // console.log("new message from home page", data);
-//     socket.broadcast.emit("hello", "world");
-//   });
-// });
 
 const PORT = process.env.PORT || 8000;
 http.listen(PORT, () => {
