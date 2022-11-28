@@ -48,8 +48,21 @@ readdirSync("./routes").map((r) => {
 
 // socket.io
 io.on("connect", (socket) => {
-  console.log("Socket connected", socket.id);
+  // console.log("Socket connected", socket.id);
+  socket.on("new-post", (newPost) => {
+    // console.log("new post => ", newPost);
+    socket.broadcast.emit("new-post-home", newPost);
+  });
 });
+
+// socket.io
+// io.on("connect", (socket) => {
+//   // console.log("Socket connected", socket.id);
+//   socket.on("hello-from-home-page", (data) => {
+//     // console.log("new message from home page", data);
+//     socket.broadcast.emit("hello", "world");
+//   });
+// });
 
 const PORT = process.env.PORT || 8000;
 http.listen(PORT, () => {

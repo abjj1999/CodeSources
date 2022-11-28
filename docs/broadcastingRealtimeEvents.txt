@@ -1,0 +1,9 @@
+unlike http requst that need to connect to server 
+every time it makes a requst
+once socket is connected and errors no more 
+we can transfer/recive data b/w client and server
+in real time without establishing xonnection 
+
+** using emit ** to send emits back and forth
+
+AB

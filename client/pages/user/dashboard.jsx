@@ -12,6 +12,12 @@ import Pagination from "@mui/material/Pagination";
 import CommentForm from "../../components/forms/CommentForm";
 import CommentM from "../../components/popUps/CommentM";
 import Search from "../../components/Search";
+import io from "socket.io-client";
+
+const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
+  reconnection: true,
+});
+
 const Dashboard = () => {
   const [state, setState] = useContext(UserContext);
   const [image, setImage] = useState({});
@@ -99,11 +105,14 @@ const Dashboard = () => {
       if (data.error) {
         toast.error(data.error);
       } else {
+        
         newsFeed();
         toast.success("Post Created");
         setContent("");
         setImage({});
         setPage(1);
+        //socket emitting
+        socket.emit("new-post", data);
       }
     } catch (error) {
       console.log(error);

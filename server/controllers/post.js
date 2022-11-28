@@ -22,9 +22,13 @@ export const createPost = async (req, res) => {
       Image: image,
       postedBy: req.user._id,
     });
-    post.save();
+    await post.save();
+    const postWithUser = await Post.findById(post._id).populate(
+      "postedBy",
+      "-password -secret"
+    );
 
-    res.json(post);
+    res.json(postWithUser);
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
