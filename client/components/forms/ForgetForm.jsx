@@ -1,6 +1,6 @@
 import React from "react";
 import { SyncOutlined } from "@ant-design/icons";
-const ForgotForm = ({
+const ForgetForm = ({
   handleSubmit,
   email,
   setEmail,
@@ -84,4 +84,4 @@ const ForgotForm = ({
   );
 };
 
-export default ForgotForm;
+export default ForgetForm;

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { UserContext } from "../context";
 import { useRouter } from "next/router";
-import ForgotForm from "../components/forms/forgetForm";
+import ForgetForm from "../components/forms/forgetForm";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -72,7 +72,7 @@ function ForgotPassword() {
       {/* {loading ? <h1>Loading</h1> : ""} */}
       <div className="row py-4">
         <div className="col-md-6 offset-md-3">
-          <ForgotForm
+          <ForgetForm
             handleSubmit={handleSubmit}
             email={email}
             setEmail={setEmail}
