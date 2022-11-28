@@ -34,6 +34,10 @@ const userSchema = new Schema(
       url: String,
       public_id: String,
     },
+    role: {
+      type: String,
+      default: "subscriber",
+    },
     following: [
       {
         type: mongoose.Schema.ObjectId,

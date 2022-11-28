@@ -73,6 +73,19 @@ const Nav = () => {
                     </a>
                   </Link>
                 </li>
+                {state.user.role === "admin" && (
+                  <li className="nav-item">
+                    <Link href="/admin">
+                      <a
+                        className={`nav-link text-light  ${
+                          current === "/admin" && "active"
+                        }`}
+                      >
+                        <span className="">Admin</span>
+                      </a>
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <a onClick={logOut} className="nav-link text-light">
                     Log OUT
