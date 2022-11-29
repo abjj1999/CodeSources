@@ -1,49 +1,40 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import Link from "next/link";
-
+import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
 import { UserContext } from "../context";
 import { useRouter } from "next/router";
-import ForgetForm from "../components/forms/forgetForm";
 
-function ForgotPassword() {
-  const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+const ForgotPassword = () => {
+  const [email, setEmail] = useState("ryan@gmail.com");
+  const [newPassword, setNewPassword] = useState("rrrrrr");
   const [secret, setSecret] = useState("");
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [state] = useContext(UserContext);
   const router = useRouter();
-  const [state, setState] = useContext(UserContext);
-  // const data = {
-  //   name,
-  //   email,
-  //   password,
-  //   secret,
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // console.log(name, email, password, secret);
       setLoading(true);
       const { data } = await axios.post(`/forgot-password`, {
         email,
         newPassword,
         secret,
       });
-      console.log(data);
-      // setOk(data.ok);
-      // setName("");
-      // setEmail("");
-      // setPassword("");
-      // setSecret("");
-      // setLoading(false);
+
+      console.log("forgot password res => ", data);
 
       if (data.error) {
         toast.error(data.error);
         setLoading(false);
       }
+
       if (data.success) {
         setEmail("");
         setNewPassword("");
@@ -51,28 +42,25 @@ function ForgotPassword() {
         setOk(true);
         setLoading(false);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
       setLoading(false);
     }
-    // console.log(data
   };
 
   if (state && state.token) router.push("/");
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col">
-          <h1 className="display-2 text-center text-info py-4">
-            Forgot Password page
-          </h1>
+    <div className="container-fluid">
+      <div className="row py-5 text-light bg-default-image">
+        <div className="col text-center">
+          <h1>Forgot password</h1>
         </div>
       </div>
-      {/* {loading ? <h1>Loading</h1> : ""} */}
-      <div className="row py-4">
+
+      <div className="row py-5">
         <div className="col-md-6 offset-md-3">
-          <ForgetForm
+          <ForgotPasswordForm
             handleSubmit={handleSubmit}
             email={email}
             setEmail={setEmail}
@@ -84,23 +72,24 @@ function ForgotPassword() {
           />
         </div>
       </div>
+
       <div className="row">
         <div className="col">
           <Modal
-            title="Congrats"
+            title="Congratulations!"
             visible={ok}
             onCancel={() => setOk(false)}
             footer={null}
           >
-            <p>You can now login with this password</p>
+            <p>Congrats! You can now login with your new password</p>
             <Link href="/login">
-              <a className="btn btn-primary">Login Now</a>
+              <a className="btn btn-primary btn-sm">Login</a>
             </Link>
           </Modal>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default ForgotPassword;
